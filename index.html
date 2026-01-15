@@ -5,25 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Link Generator Pro</title>
     <style>
-        /* Variáveis de Cores Tema Dark */
         :root {
-            --bg-color: #09090b;
-            --card-bg: #18181b;
-            --accent-color: #1db954; /* Verde Spotify */
+            --bg-color: #0b0b0d;
+            --card-bg: #121214;
+            --accent-color: #1db954; 
             --accent-hover: #1ed760;
-            --text-primary: #f4f4f5;
-            --text-secondary: #a1a1aa;
-            --input-bg: #27272a;
-            --border-color: #3f3f46;
-            --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+            --text-primary: #ffffff;
+            --text-secondary: #b3b3b3;
+            --input-bg: #2a2a2e;
+            --border-color: #333336;
         }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
 
         body {
             background-color: var(--bg-color);
@@ -35,158 +28,112 @@
             padding: 20px;
         }
 
+        /* Seletor de Idioma */
+        .lang-switcher {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .lang-btn {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            padding: 5px 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: 0.3s;
+        }
+
+        .lang-btn:hover { border-color: var(--accent-color); }
+
         .container {
             background-color: var(--card-bg);
             width: 100%;
-            max-width: 500px;
-            padding: 40px;
-            border-radius: 24px;
+            max-width: 450px;
+            padding: 30px;
+            border-radius: 20px;
             border: 1px solid var(--border-color);
-            box-shadow: var(--shadow);
-            animation: fadeIn 0.6s ease-out;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.5);
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+        h1 { font-size: 1.6rem; margin-bottom: 25px; text-align: center; color: var(--accent-color); }
 
-        h1 {
-            font-size: 1.8rem;
-            margin-bottom: 8px;
-            text-align: center;
-            background: linear-gradient(to right, #fff, #a1a1aa);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        p.subtitle {
-            color: var(--text-secondary);
-            text-align: center;
-            font-size: 0.9rem;
-            margin-bottom: 30px;
-        }
-
-        .input-group {
-            margin-bottom: 25px;
-        }
-
-        label {
-            display: block;
-            font-size: 0.85rem;
-            font-weight: 600;
-            color: var(--text-secondary);
-            margin-bottom: 8px;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
+        .input-group { margin-bottom: 20px; }
+        label { display: block; font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 8px; }
 
         input[type="number"] {
             width: 100%;
-            background-color: var(--input-bg);
+            background: var(--input-bg);
             border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 14px;
+            border-radius: 10px;
+            padding: 12px;
             color: white;
             font-size: 1rem;
             outline: none;
-            transition: all 0.3s;
         }
 
-        input[type="number"]:focus {
-            border-color: var(--accent-color);
-            box-shadow: 0 0 0 2px rgba(29, 185, 84, 0.2);
-        }
-
-        .actions {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-            margin-bottom: 25px;
-        }
+        .actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
 
         button {
             border: none;
-            border-radius: 12px;
-            padding: 14px;
-            font-size: 1rem;
-            font-weight: 600;
+            border-radius: 10px;
+            padding: 12px;
+            font-weight: bold;
             cursor: pointer;
-            transition: all 0.2s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
+            transition: 0.2s;
         }
 
-        #btnStart {
-            background-color: var(--accent-color);
-            color: #000;
-        }
+        #btnStart { background-color: var(--accent-color); color: black; }
+        #btnStart:hover { background-color: var(--accent-hover); transform: scale(1.02); }
 
-        #btnStart:hover {
-            background-color: var(--accent-hover);
-            transform: translateY(-2px);
-        }
-
-        #btnCopy {
-            background-color: var(--input-bg);
-            color: white;
-            border: 1px solid var(--border-color);
-        }
-
-        #btnCopy:hover:not(:disabled) {
-            background-color: #333;
-            border-color: var(--text-secondary);
-        }
-
-        #btnCopy:disabled {
-            opacity: 0.4;
-            cursor: not-allowed;
-        }
+        #btnCopy { background-color: var(--input-bg); color: white; border: 1px solid var(--border-color); }
+        #btnCopy:disabled { opacity: 0.3; cursor: not-allowed; }
 
         #output {
             width: 100%;
-            height: 180px;
+            height: 150px;
             background-color: #000;
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 12px;
-            font-family: 'Fira Code', 'Courier New', monospace;
-            font-size: 0.85rem;
+            border-radius: 10px;
+            padding: 10px;
+            font-family: 'Consolas', monospace;
+            font-size: 0.8rem;
             color: var(--accent-color);
             overflow-y: auto;
             white-space: pre;
-            scrollbar-width: thin;
-            scrollbar-color: var(--border-color) transparent;
+            border: 1px solid var(--border-color);
         }
-
-        /* Custom Scrollbar for Chrome/Safari */
-        #output::-webkit-scrollbar { width: 6px; }
-        #output::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 10px; }
 
         .toast {
             position: fixed;
             bottom: 20px;
             background: var(--accent-color);
             color: black;
-            padding: 10px 20px;
-            border-radius: 50px;
+            padding: 10px 25px;
+            border-radius: 30px;
             font-weight: bold;
             display: none;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+            animation: slideUp 0.3s ease;
         }
+
+        @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
     </style>
 </head>
 <body>
 
+    <div class="lang-switcher">
+        <button class="lang-btn" onclick="setLanguage('pt')">🇧🇷</button>
+        <button class="lang-btn" onclick="setLanguage('en')">🇺🇸</button>
+    </div>
+
     <div class="container">
         <h1 id="t-title">Gerador de Links</h1>
-        <p class="subtitle" id="t-sub">Spotify Code Generator</p>
 
         <div class="input-group">
-            <label id="t-label" for="quantidade">Quantidade</label>
-            <input type="number" id="quantidade" value="10" min="1">
+            <label id="t-label">Quantidade</label>
+            <input type="number" id="quantidade" value="5" min="1">
         </div>
 
         <div class="actions">
@@ -197,75 +144,80 @@
         <div id="output"></div>
     </div>
 
-    <div id="toast" class="toast">Copiado!</div>
+    <div id="toast" class="toast"></div>
 
     <script>
-        // Idiomas
-        const lang = {
+        const translations = {
             pt: {
                 title: "Gerador de Links",
-                sub: "Gerador de Códigos Aleatórios",
-                label: "Quantidade",
+                label: "Quantidade de links:",
                 start: "Começar",
-                copy: "Copiar",
+                copy: "Copiar Tudo",
                 toast: "Copiado para a área de transferência!",
-                wait: "Aguardando geração..."
+                wait: "Os links aparecerão aqui..."
             },
             en: {
                 title: "Link Generator",
-                sub: "Random Code Generator",
-                label: "Quantity",
-                start: "Start",
-                copy: "Copy",
+                label: "Amount of links:",
+                start: "Start Now",
+                copy: "Copy All",
                 toast: "Copied to clipboard!",
-                wait: "Waiting for generation..."
+                wait: "Links will appear here..."
             }
         };
 
-        // Detectar Idioma
-        const userLang = navigator.language.startsWith('en') ? 'en' : 'pt';
-        const t = lang[userLang];
-
-        // Aplicar textos
-        document.getElementById('t-title').textContent = t.title;
-        document.getElementById('t-sub').textContent = t.sub;
-        document.getElementById('t-label').textContent = t.label;
-        document.getElementById('t-btn-start').textContent = t.start;
-        document.getElementById('t-btn-copy').textContent = t.copy;
-        document.getElementById('output').textContent = t.wait;
-
-        const BASE_URL = "https://www.spotify.com/br-pt/ppt/microsoft/?code=code=";
-
-        function makeId(length) {
-            let result = '';
-            const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-            for (let i = 0; i < length; i++) {
-                result += characters.charAt(Math.floor(Math.random() * characters.length));
+        // Função para mudar o idioma
+        function setLanguage(langCode) {
+            localStorage.setItem('preferredLang', langCode);
+            const t = translations[langCode];
+            
+            document.getElementById('t-title').textContent = t.title;
+            document.getElementById('t-label').textContent = t.label;
+            document.getElementById('t-btn-start').textContent = t.start;
+            document.getElementById('t-btn-copy').textContent = t.copy;
+            if(document.getElementById('output').textContent.includes("...")) {
+                document.getElementById('output').textContent = t.wait;
             }
-            return result;
+            window.currentLang = langCode;
+        }
+
+        // Inicialização (Detecta navegador ou memória)
+        const savedLang = localStorage.getItem('preferredLang');
+        const defaultLang = savedLang || (navigator.language.startsWith('en') ? 'en' : 'pt');
+        setLanguage(defaultLang);
+
+        // Lógica do Link
+        const BASE_URL = "https://www.spotify.com/br-pt/ppt/microsoft/?code=?code=";
+
+        function generateRandomCode(length = 15) {
+            const charset = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+            let retVal = "";
+            for (let i = 0; i < length; ++i) {
+                retVal += charset.charAt(Math.floor(Math.random() * charset.length));
+            }
+            return retVal;
         }
 
         document.getElementById('btnStart').onclick = () => {
             const qty = document.getElementById('quantidade').value;
             const output = document.getElementById('output');
-            const btnCopy = document.getElementById('btnCopy');
-            
             let links = [];
+
             for (let i = 0; i < qty; i++) {
-                links.push(BASE_URL + makeId(12));
+                links.push(`${BASE_URL}${generateRandomCode()}`);
             }
 
             output.textContent = links.join('\n');
-            btnCopy.disabled = false;
+            document.getElementById('btnCopy').disabled = false;
         };
 
         document.getElementById('btnCopy').onclick = () => {
             const text = document.getElementById('output').textContent;
             navigator.clipboard.writeText(text).then(() => {
                 const toast = document.getElementById('toast');
-                toast.textContent = t.toast;
+                toast.textContent = translations[window.currentLang].toast;
                 toast.style.display = 'block';
-                setTimeout(() => { toast.style.display = 'none'; }, 2000);
+                setTimeout(() => { toast.style.display = 'none'; }, 2500);
             });
         };
     </script>
