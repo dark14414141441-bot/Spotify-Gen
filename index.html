@@ -3,41 +3,157 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gerador de Links</title>
+    <title>Generator</title>
     <style>
-        /* Estilos básicos para melhor visualização */
-        body { font-family: Arial, sans-serif; padding: 20px; }
-        #linkContainer {
-            margin-top: 20px;
-            padding: 10px;
-            border: 1px solid #ccc;
-            min-height: 100px;
-            white-space: pre-wrap; /* Preserva quebras de linha */
-            background-color: #f9f9f9;
+        body { 
+            font-family: 'Segoe UI', Arial, sans-serif; 
+            padding: 20px; 
+            background-color: #f0f2f5; 
+            color: #1c1e21;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
-        button {
-            padding: 10px 15px;
-            margin-right: 10px;
-            cursor: pointer;
+        .card {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            max-width: 600px;
+            width: 100%;
         }
+        h1 { margin-top: 0; color: #1877f2; font-size: 1.5rem; }
+        .input-group { margin: 20px 0; }
+        label { display: block; margin-bottom: 8px; font-weight: bold; }
         input[type="number"] {
-            padding: 8px;
-            margin-right: 10px;
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            box-sizing: border-box;
+            font-size: 1rem;
+        }
+        .buttons { display: flex; gap: 10px; margin-bottom: 20px; }
+        button {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1rem;
+            transition: opacity 0.2s;
+        }
+        #btnComecar { background-color: #42b72a; color: white; }
+        #btnCopiar { background-color: #1877f2; color: white; }
+        button:disabled { opacity: 0.5; cursor: not-allowed; }
+        
+        #linkContainer {
+            width: 100%;
+            height: 200px;
+            margin-top: 10px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            background-color: #f9f9f9;
+            font-family: monospace;
+            font-size: 0.9rem;
+            overflow-y: scroll;
+            white-space: pre;
+            box-sizing: border-box;
         }
     </style>
 </head>
 <body>
-    <h1>Gerador de Links Aleatórios</h1>
 
-    <label for="quantidade">Quantidade de links a gerar:</label>
-    <input type="number" id="quantidade" min="1" value="10">
+    <div class="card">
+        <h1 id="txt-titulo">Gerador de Links</h1>
 
-    <button id="btnComecar">Começar</button>
-    <button id="btnCopiar" disabled>Copiar Links</button>
-    
-    <h3>Links Gerados:</h3>
-    <div id="linkContainer"></div>
+        <div class="input-group">
+            <label id="txt-label-qtd" for="quantidade">Quantidade:</label>
+            <input type="number" id="quantidade" min="1" value="10">
+        </div>
 
-    <script src="script.js"></script>
+        <div class="buttons">
+            <button id="btnComecar">Começar</button>
+            <button id="btnCopiar" disabled>Copiar</button>
+        </div>
+        
+        <div id="linkContainer"></div>
+    </div>
+
+    <script>
+        // --- CONFIGURAÇÃO DE IDIOMA ---
+        const translations = {
+            pt: {
+                titulo: "Gerador de Links Aleatórios",
+                labelQtd: "Quantidade:",
+                btnComecar: "Começar",
+                btnCopiar: "Copiar",
+                alertaSucesso: "Links copiados com sucesso!",
+                alertaErro: "Por favor, insira um número válido.",
+                placeholder: "Os links aparecerão aqui..."
+            },
+            en: {
+                titulo: "Random Link Generator",
+                labelQtd: "Quantity:",
+                btnComecar: "Start",
+                btnCopiar: "Copy",
+                alertaSucesso: "Links copied successfully!",
+                alertaErro: "Please enter a valid number.",
+                placeholder: "Links will appear here..."
+            }
+        };
+
+        // Detecta se o idioma é inglês (qualquer variação como en-US, en-GB)
+        const userLang = navigator.language.startsWith('en') ? 'en' : 'pt';
+        const t = translations[userLang];
+
+        // Aplica as traduções na tela
+        document.getElementById('txt-titulo').textContent = t.titulo;
+        document.getElementById('txt-label-qtd').textContent = t.labelQtd;
+        document.getElementById('btnComecar').textContent = t.btnComecar;
+        document.getElementById('btnCopiar').textContent = t.btnCopiar;
+        document.getElementById('linkContainer').textContent = t.placeholder;
+
+        // --- LÓGICA DO GERADOR ---
+        const BASE_LINK = "https://www.spotify.com/br-pt/ppt/microsoft/?code=";
+
+        function gerarCodigo(tamanho = 12) {
+            const caracteres = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+            let resultado = '';
+            for (let i = 0; i < tamanho; i++) {
+                resultado += caracteres.charAt(Math.floor(Math.random() * caracteres.length));
+            }
+            return resultado;
+        }
+
+        document.getElementById('btnComecar').onclick = function() {
+            const qtd = parseInt(document.getElementById('quantidade').value);
+            const container = document.getElementById('linkContainer');
+            const btnCopiar = document.getElementById('btnCopiar');
+
+            if (isNaN(qtd) || qtd <= 0) {
+                alert(t.alertaErro);
+                return;
+            }
+
+            let listaLinks = [];
+            for (let i = 0; i < qtd; i++) {
+                // Monta o link: BASE + code= + ALEATORIO
+                listaLinks.push(`${BASE_LINK}code=${gerarCodigo()}`);
+            }
+
+            container.textContent = listaLinks.join('\n');
+            btnCopiar.disabled = false;
+        };
+
+        document.getElementById('btnCopiar').onclick = function() {
+            const texto = document.getElementById('linkContainer').textContent;
+            navigator.clipboard.writeText(texto).then(() => {
+                alert(t.alertaSucesso);
+            });
+        };
+    </script>
 </body>
 </html>
