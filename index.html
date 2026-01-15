@@ -3,155 +3,269 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Generator</title>
+    <title>Link Generator Pro</title>
     <style>
-        body { 
-            font-family: 'Segoe UI', Arial, sans-serif; 
-            padding: 20px; 
-            background-color: #f0f2f5; 
-            color: #1c1e21;
+        /* Variáveis de Cores Tema Dark */
+        :root {
+            --bg-color: #09090b;
+            --card-bg: #18181b;
+            --accent-color: #1db954; /* Verde Spotify */
+            --accent-hover: #1ed760;
+            --text-primary: #f4f4f5;
+            --text-secondary: #a1a1aa;
+            --input-bg: #27272a;
+            --border-color: #3f3f46;
+            --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-primary);
             display: flex;
-            flex-direction: column;
+            justify-content: center;
             align-items: center;
+            min-height: 100vh;
+            padding: 20px;
         }
-        .card {
-            background: white;
-            padding: 2rem;
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-            max-width: 600px;
+
+        .container {
+            background-color: var(--card-bg);
             width: 100%;
+            max-width: 500px;
+            padding: 40px;
+            border-radius: 24px;
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow);
+            animation: fadeIn 0.6s ease-out;
         }
-        h1 { margin-top: 0; color: #1877f2; font-size: 1.5rem; }
-        .input-group { margin: 20px 0; }
-        label { display: block; margin-bottom: 8px; font-weight: bold; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h1 {
+            font-size: 1.8rem;
+            margin-bottom: 8px;
+            text-align: center;
+            background: linear-gradient(to right, #fff, #a1a1aa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        p.subtitle {
+            color: var(--text-secondary);
+            text-align: center;
+            font-size: 0.9rem;
+            margin-bottom: 30px;
+        }
+
+        .input-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
         input[type="number"] {
             width: 100%;
-            padding: 12px;
-            border: 1px solid #ddd;
-            border-radius: 6px;
-            box-sizing: border-box;
+            background-color: var(--input-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 14px;
+            color: white;
             font-size: 1rem;
+            outline: none;
+            transition: all 0.3s;
         }
-        .buttons { display: flex; gap: 10px; margin-bottom: 20px; }
+
+        input[type="number"]:focus {
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 2px rgba(29, 185, 84, 0.2);
+        }
+
+        .actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 25px;
+        }
+
         button {
-            flex: 1;
-            padding: 12px;
             border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: bold;
+            border-radius: 12px;
+            padding: 14px;
             font-size: 1rem;
-            transition: opacity 0.2s;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
         }
-        #btnComecar { background-color: #42b72a; color: white; }
-        #btnCopiar { background-color: #1877f2; color: white; }
-        button:disabled { opacity: 0.5; cursor: not-allowed; }
-        
-        #linkContainer {
+
+        #btnStart {
+            background-color: var(--accent-color);
+            color: #000;
+        }
+
+        #btnStart:hover {
+            background-color: var(--accent-hover);
+            transform: translateY(-2px);
+        }
+
+        #btnCopy {
+            background-color: var(--input-bg);
+            color: white;
+            border: 1px solid var(--border-color);
+        }
+
+        #btnCopy:hover:not(:disabled) {
+            background-color: #333;
+            border-color: var(--text-secondary);
+        }
+
+        #btnCopy:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        #output {
             width: 100%;
-            height: 200px;
-            margin-top: 10px;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 6px;
-            background-color: #f9f9f9;
-            font-family: monospace;
-            font-size: 0.9rem;
-            overflow-y: scroll;
+            height: 180px;
+            background-color: #000;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 12px;
+            font-family: 'Fira Code', 'Courier New', monospace;
+            font-size: 0.85rem;
+            color: var(--accent-color);
+            overflow-y: auto;
             white-space: pre;
-            box-sizing: border-box;
+            scrollbar-width: thin;
+            scrollbar-color: var(--border-color) transparent;
+        }
+
+        /* Custom Scrollbar for Chrome/Safari */
+        #output::-webkit-scrollbar { width: 6px; }
+        #output::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 10px; }
+
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            background: var(--accent-color);
+            color: black;
+            padding: 10px 20px;
+            border-radius: 50px;
+            font-weight: bold;
+            display: none;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.5);
         }
     </style>
 </head>
 <body>
 
-    <div class="card">
-        <h1 id="txt-titulo">Gerador de Links</h1>
+    <div class="container">
+        <h1 id="t-title">Gerador de Links</h1>
+        <p class="subtitle" id="t-sub">Spotify Code Generator</p>
 
         <div class="input-group">
-            <label id="txt-label-qtd" for="quantidade">Quantidade:</label>
-            <input type="number" id="quantidade" min="1" value="10">
+            <label id="t-label" for="quantidade">Quantidade</label>
+            <input type="number" id="quantidade" value="10" min="1">
         </div>
 
-        <div class="buttons">
-            <button id="btnComecar">Começar</button>
-            <button id="btnCopiar" disabled>Copiar</button>
+        <div class="actions">
+            <button id="btnStart">🚀 <span id="t-btn-start">Começar</span></button>
+            <button id="btnCopy" disabled>📋 <span id="t-btn-copy">Copiar</span></button>
         </div>
-        
-        <div id="linkContainer"></div>
+
+        <div id="output"></div>
     </div>
 
+    <div id="toast" class="toast">Copiado!</div>
+
     <script>
-        // --- CONFIGURAÇÃO DE IDIOMA ---
-        const translations = {
+        // Idiomas
+        const lang = {
             pt: {
-                titulo: "Gerador de Links Aleatórios",
-                labelQtd: "Quantidade:",
-                btnComecar: "Começar",
-                btnCopiar: "Copiar",
-                alertaSucesso: "Links copiados com sucesso!",
-                alertaErro: "Por favor, insira um número válido.",
-                placeholder: "Os links aparecerão aqui..."
+                title: "Gerador de Links",
+                sub: "Gerador de Códigos Aleatórios",
+                label: "Quantidade",
+                start: "Começar",
+                copy: "Copiar",
+                toast: "Copiado para a área de transferência!",
+                wait: "Aguardando geração..."
             },
             en: {
-                titulo: "Random Link Generator",
-                labelQtd: "Quantity:",
-                btnComecar: "Start",
-                btnCopiar: "Copy",
-                alertaSucesso: "Links copied successfully!",
-                alertaErro: "Please enter a valid number.",
-                placeholder: "Links will appear here..."
+                title: "Link Generator",
+                sub: "Random Code Generator",
+                label: "Quantity",
+                start: "Start",
+                copy: "Copy",
+                toast: "Copied to clipboard!",
+                wait: "Waiting for generation..."
             }
         };
 
-        // Detecta se o idioma é inglês (qualquer variação como en-US, en-GB)
+        // Detectar Idioma
         const userLang = navigator.language.startsWith('en') ? 'en' : 'pt';
-        const t = translations[userLang];
+        const t = lang[userLang];
 
-        // Aplica as traduções na tela
-        document.getElementById('txt-titulo').textContent = t.titulo;
-        document.getElementById('txt-label-qtd').textContent = t.labelQtd;
-        document.getElementById('btnComecar').textContent = t.btnComecar;
-        document.getElementById('btnCopiar').textContent = t.btnCopiar;
-        document.getElementById('linkContainer').textContent = t.placeholder;
+        // Aplicar textos
+        document.getElementById('t-title').textContent = t.title;
+        document.getElementById('t-sub').textContent = t.sub;
+        document.getElementById('t-label').textContent = t.label;
+        document.getElementById('t-btn-start').textContent = t.start;
+        document.getElementById('t-btn-copy').textContent = t.copy;
+        document.getElementById('output').textContent = t.wait;
 
-        // --- LÓGICA DO GERADOR ---
-        const BASE_LINK = "https://www.spotify.com/br-pt/ppt/microsoft/?code=";
+        const BASE_URL = "https://www.spotify.com/br-pt/ppt/microsoft/?code=code=";
 
-        function gerarCodigo(tamanho = 12) {
-            const caracteres = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-            let resultado = '';
-            for (let i = 0; i < tamanho; i++) {
-                resultado += caracteres.charAt(Math.floor(Math.random() * caracteres.length));
+        function makeId(length) {
+            let result = '';
+            const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+            for (let i = 0; i < length; i++) {
+                result += characters.charAt(Math.floor(Math.random() * characters.length));
             }
-            return resultado;
+            return result;
         }
 
-        document.getElementById('btnComecar').onclick = function() {
-            const qtd = parseInt(document.getElementById('quantidade').value);
-            const container = document.getElementById('linkContainer');
-            const btnCopiar = document.getElementById('btnCopiar');
-
-            if (isNaN(qtd) || qtd <= 0) {
-                alert(t.alertaErro);
-                return;
+        document.getElementById('btnStart').onclick = () => {
+            const qty = document.getElementById('quantidade').value;
+            const output = document.getElementById('output');
+            const btnCopy = document.getElementById('btnCopy');
+            
+            let links = [];
+            for (let i = 0; i < qty; i++) {
+                links.push(BASE_URL + makeId(12));
             }
 
-            let listaLinks = [];
-            for (let i = 0; i < qtd; i++) {
-                // Monta o link: BASE + code= + ALEATORIO
-                listaLinks.push(`${BASE_LINK}code=${gerarCodigo()}`);
-            }
-
-            container.textContent = listaLinks.join('\n');
-            btnCopiar.disabled = false;
+            output.textContent = links.join('\n');
+            btnCopy.disabled = false;
         };
 
-        document.getElementById('btnCopiar').onclick = function() {
-            const texto = document.getElementById('linkContainer').textContent;
-            navigator.clipboard.writeText(texto).then(() => {
-                alert(t.alertaSucesso);
+        document.getElementById('btnCopy').onclick = () => {
+            const text = document.getElementById('output').textContent;
+            navigator.clipboard.writeText(text).then(() => {
+                const toast = document.getElementById('toast');
+                toast.textContent = t.toast;
+                toast.style.display = 'block';
+                setTimeout(() => { toast.style.display = 'none'; }, 2000);
             });
         };
     </script>
