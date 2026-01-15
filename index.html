@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerador de Links</title>
+    <style>
+        /* Estilos básicos para melhor visualização */
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        #linkContainer {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            min-height: 100px;
+            white-space: pre-wrap; /* Preserva quebras de linha */
+            background-color: #f9f9f9;
+        }
+        button {
+            padding: 10px 15px;
+            margin-right: 10px;
+            cursor: pointer;
+        }
+        input[type="number"] {
+            padding: 8px;
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Gerador de Links Aleatórios</h1>
+
+    <label for="quantidade">Quantidade de links a gerar:</label>
+    <input type="number" id="quantidade" min="1" value="10">
+
+    <button id="btnComecar">Começar</button>
+    <button id="btnCopiar" disabled>Copiar Links</button>
+    
+    <h3>Links Gerados:</h3>
+    <div id="linkContainer"></div>
+
+    <script src="script.js"></script>
+</body>
+</html>
